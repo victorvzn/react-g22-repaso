@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 function App() {
+  // const [loading, setLoading] = useState(false)
   const [input, setInput] = useState('')
   const [tasks, setTasks] = useState([
     {
@@ -29,8 +30,10 @@ function App() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     console.log('Agregando tarea!!!')
+
+    // setLoading(true)
 
     const newTodo = {
       id: crypto.randomUUID(),
@@ -43,6 +46,22 @@ function App() {
     setTasks([...tasks, newTodo])
 
     setInput('')
+
+    // setTimeout(() => {
+    //   setLoading(false)
+    // }, 2000)
+  }
+
+  const handleRemoveTask = (id) => {
+    console.log('eliminando tarea', id)
+
+    const newTasks = tasks.filter(task => task.id !== id)
+
+    console.log(newTasks)
+
+    setTasks(newTasks)
+
+    // ['😜','😍','🤩'].filter(emoti => emoti !== '😍')
   }
 
   return (
@@ -62,6 +81,7 @@ function App() {
             value={input}
             onChange={handleChange}
           />
+          {/* <input type="submit" value={loading ? 'Agregando' : 'ADD'} /> */}
           <input type="submit" value="ADD" />
         </form>
 
@@ -72,9 +92,17 @@ function App() {
                 <li key={task.id}>
                   <input
                     type="checkbox"
+                    checked
                   />
-                  {task.title}
-                  <button>❌</button>
+                  <span
+                    style={{
+                      color: 'red',
+                      textDecoration: task.completed ? 'line-through' : 'none'
+                    }}
+                  >
+                    {task.title}
+                  </span>
+                  <button onClick={() => handleRemoveTask(task.id)}>❌</button>
                 </li>
               )
             })}

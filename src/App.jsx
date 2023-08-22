@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 function App() {
   // const [loading, setLoading] = useState(false)
@@ -20,6 +20,22 @@ function App() {
       completed: false
     }
   ])
+
+  const fetchTodos = async () => {
+    const url = 'https://jsonplaceholder.typicode.com/posts'
+    const response = await fetch(url)
+    const data = await response.json()
+
+    const newData = data.map(task => {
+      return { ...task, completed: false }
+    })
+
+    setTasks(newData)
+  }
+
+  useEffect(() => {
+    fetchTodos()
+  }, [])
 
   const handleChange = (event) => {
     // console.log('estoy escribiendo')
@@ -64,6 +80,23 @@ function App() {
     // ['😜','😍','🤩'].filter(emoti => emoti !== '😍')
   }
 
+  const handleCompleted = (event) => {
+    console.log('complentando..')
+    const isChecked = event.target.checked
+    const idSelected = event.target.dataset.id
+
+    console.log(isChecked, idSelected)
+
+    const newTasks = tasks.map(task => {
+      if (task.id === idSelected) {
+        return { ...task, completed: isChecked }
+      }
+      return task
+    })
+
+    setTasks(newTasks)
+  }
+
   return (
     <>
       <main>
@@ -85,6 +118,13 @@ function App() {
           <input type="submit" value="ADD" />
         </form>
 
+        <div>
+          {/* TODO: Traer la lista de tareas completadas y el total */}
+          <span>1 / 3</span>
+          {/* TODO: Añadir un botón que permita limpiar las tareas completadas */}
+          <button>Limpiar tareas completadas</button>
+        </div>
+
         <section>
           <ul>
             {tasks.map((task) => {
@@ -92,7 +132,9 @@ function App() {
                 <li key={task.id}>
                   <input
                     type="checkbox"
-                    checked
+                    checked={task.completed}
+                    data-id={task.id}
+                    onChange={handleCompleted}
                   />
                   <span
                     style={{

@@ -1,4 +1,14 @@
+import { useContext } from "react"
+
+import { CartContext } from "../context/cart"
+
 const ProductItem = ({ product }) => {
+  const { addToCart } = useContext(CartContext)
+
+  const handleAddToCart = (product) => {
+    addToCart(product)
+  }
+
   return (
     <article
       className="border rounded-lg shadow"
@@ -11,6 +21,7 @@ const ProductItem = ({ product }) => {
         <span className="text-3xl font-bold">${product.price}</span>
         <button
           className="bg-green-400 px-5 py-2 text-center rounded-lg font-medium text-white hover:bg-green-500 duration-300"
+          onClick={() => handleAddToCart(product)}
         >
           Add to cart
         </button>

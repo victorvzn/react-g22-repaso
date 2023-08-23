@@ -1,7 +1,13 @@
 import { useState } from "react"
 
+import { useContext } from "react"
+
+import { CartContext } from "../context/cart"
+
 const Header = () => {
   const [openCart, setOpenCart] = useState(false)
+
+  const { cart, removeFromCart } = useContext(CartContext)
 
   const handleOpenCart = () => {
     setOpenCart(!openCart)
@@ -13,22 +19,33 @@ const Header = () => {
         <h1 className="text-3xl text-white">CartApp</h1>
 
         <section className="relative">
-          <button onClick={handleOpenCart}>Cart (5)</button>
+          <button onClick={handleOpenCart}>Cart ({cart.length})</button>
+
+          {/* -{JSON.stringify(cart)}- */}
 
           {openCart && (
-            <div className="absolute right-0 bg-slate-500 w-60 h-96 p-4">
-            <h3 className="text-2xl text-white">Carrito de compras</h3>
+            <div className="absolute right-0 bg-white shadow-lg border rounded-lg w-96 p-4">
+              <h3 className="text-2xl ">Carrito de compras</h3>
 
-            <div className="pt-4">
-              <ul>
-                <li>Product (x1) - $549</li>
-                <li>Product (x1) - $549</li>
-                <li>Product (x1) - $549</li>
-                <li>Product (x1) - $549</li>
-                <li>Product (x1) - $549</li>
-              </ul>
+              <div className="pt-4">
+                <ul>
+                  {cart.map(product => {
+                    return (
+                      <li
+                        key={product.id}
+                        className="bg-slate-200 mb-3 p-3 flex justify-between"
+                      >
+                        {product.title} (x1) - $549
+                        <button
+                          className="bg-red-600 p-2 text-white"
+                          onClick={() => removeFromCart(product.id)}
+                        >✖</button>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
             </div>
-          </div>
           )}
         </section>
 

@@ -1,9 +1,13 @@
 import CartApp from "./pages/CartApp"
 
+import { CartProvider } from './context/cart.jsx'
+
 function App() {
   return (
     <>
-      <CartApp />
+      <CartProvider>
+        <CartApp />
+      </CartProvider>
     </>
   )
 }
